@@ -60,7 +60,7 @@ class entidad{
 	
 	public function procesa_documentos_entidad($ids_entidad, $bd_obj){
 		$datos_entidades = $this->get_datos_entidades( $ids_entidad , $bd_obj);
-		$sql = "SELECT d.id as id_documento, d.nombre_archivo, d.url,  ";
+		$sql = "SELECT d.id as id_documento, d.nombre_archivo, d.url,   ";
 		$sql .= " cev.concepto as concepto, cee.id_entidad ";
 		$sql .= " FROM evaluacion_transparencia_documentos_entidades d, evaluacion_transparencia_valores cee, ";
 		$sql .= " evaluacion_transparencia_catalogo_criterios cev";
@@ -77,10 +77,11 @@ class entidad{
 															"nombre_archivo" => $fila["nombre_archivo"],
 															"url" => $fila["url"],
 															"concepto" => $fila["concepto"],
+															//"anio" => $fila["anio"],
 				);
 		}
 		
-		$sql = "SELECT d.id as id_documento, d.nombre_archivo, d.url, d.id_entidad, c.concepto  ";
+		$sql = "SELECT d.id as id_documento, d.nombre_archivo, d.url, d.id_entidad, d.anio, c.concepto  ";
 		$sql .= " FROM documentos_generales_valores d, documentos_generales_catalogo_conceptos c ";
 		$sql .= " WHERE d.id_tipo_documento = c.id AND ";
 		$sql .= " d.id_entidad IN ( " . $this->get_cadena_ids( $ids_entidad ) . ")";
@@ -90,10 +91,13 @@ class entidad{
 				$resultados[$fila["id_entidad"]] = array( "datos_entidad" => $datos_entidades[$fila["id_entidad"]], 
 						"documentos" => array( "reporte_imco" => array(), "generales" => array() ) );
 			}
-			$resultados[$fila["id_entidad"]]["documentos"]["generales"][$fila["id_documento"]] =  array(
+			if ( ! isset( $resultados[$fila["id_entidad"]]["generales"][$fila["concepto"]] ) ){
+				$resultados[$fila["id_entidad"]]["generales"][$fila["concepto"]] = array();
+			}
+			$resultados[$fila["id_entidad"]]["documentos"]["generales"][$fila["concepto"]][$fila["id_documento"]] =  array(
 															"nombre_archivo" => $fila["nombre_archivo"],
 															"url" => $fila["url"],
-															"concepto" => $fila["concepto"],
+															"anio" => $fila["anio"],
 				);
 		}
 		
@@ -308,7 +312,7 @@ class entidad{
 																	"nombre_completo" => $fila["nombre_completo"],
 																	"descripcion" => $fila["descripcion_250"],
 																	),
-												"valuacion_actuarial" => array()
+												"informacion_presupuestal" => array()
 										);
 			}
 			if (! isset($resultados[$fila["id"]]["informacion_presupuestal"][$fila["anio"]]) )
@@ -506,7 +510,7 @@ class entidad{
 	}
 	
 	public function get_catalogo_entidades_x_tipo_entidad($id_tipo_entidad, $bd_obj){
-		$sql = "SELECT e.id, t.nombre as tipo_entidad, e.nombre, e.descripcion, e.nombre_completo  ";
+		$sql = "SELECT e.id, t.nombre as tipo_entidad, e.nombre, e.descripcion_250, e.nombre_completo  ";
 		$sql .= " FROM entidades_catalogo e, entidades_tipo_catalogo t ";
 		$sql .= " WHERE t.id = e.id_tipo_entidad AND e.id_tipo_entidad IN ( " . $id_tipo_entidad . " ) ";
 		$sql .= " ORDER BY e.nombre";
@@ -518,7 +522,7 @@ class entidad{
 	}
 	
 	public function get_catalogo_entidades_todos_tipos($bd_obj){
-		$sql = "SELECT e.id, t.nombre as tipo_entidad, e.nombre, e.descripcion, e.nombre_completo  ";
+		$sql = "SELECT e.id, t.nombre as tipo_entidad, e.nombre, e.descripcion_250, e.nombre_completo  ";
 		$sql .= " FROM entidades_catalogo e, entidades_tipo_catalogo t ";
 		$sql .= " ORDER BY e.nombre";
 		$resultado = $bd_obj->ejecutarConsulta($sql);
@@ -540,7 +544,7 @@ class entidad{
 	
 	public function get_catalogo_reporte_imco($bd_obj){
 		$sql = "SELECT id, concepto, tipo_dato ";
-		$sql .= " FROM entidades_reporte_imco_catalogo ";
+		$sql .= " FROM reporte_imco_catalogo_conceptos ";
 		$res = $bd_obj->ejecutarConsulta($sql);
 		$resultados = array();
 		while ($fila = pg_fetch_assoc($res))
