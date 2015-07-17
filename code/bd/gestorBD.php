@@ -8,10 +8,10 @@ class gestorBD{
 	protected $bd;
 
 	function __construct(){
-		$this->usuario = "username";
-		$this->contrasena = "password";
+		$this->usuario = "user_name";
+		$this->contrasena = "user_pwd";
 		$this->servidor = "server_ip";
-		$this->puerto = "postgresql_port";
+		$this->puerto = "db_port";
 		$this->bd = "db_name";	
 	}
 

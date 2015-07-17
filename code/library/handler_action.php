@@ -36,6 +36,20 @@ class handler_action{
 				"get_entidad_pe_li" => array ("method" => "get_entidad_pe_li", "object" => "entidad"),
 				//Regresa los datos de ley de ingresos y presupuesto de egresos para n entidades
 				"get_n_entidades_pe_li" => array ("method" => "get_n_entidades_pe_li", "object" => "entidad"),
+				
+				//Regresa las cuentas publicas de un municipio
+				"get_entidad_cuentas_publicas" => array ("method" => "get_entidad_cuentas_publicas", "object" => "entidad"),
+				//Regresa las cuentas publicas de n municipios
+				"get_n_entidades_cuentas_publicas" => array ("method" => "get_n_entidades_cuentas_publicas", "object" => "entidad"),
+				//Regresa la información presupuestal de un municipio
+				"get_entidad_informacion_presupuestal" => array ("method" => "get_entidad_informacion_presupuestal", "object" => "entidad"),
+				//Regresa la información presupuestal de n municipios
+				"get_n_entidades_informacion_presupuestal" => array ("method" => "get_n_entidades_informacion_presupuestal", "object" => "entidad"),
+				//Regresa la valuacion actuarial de un municipio
+				"get_entidad_valuacion_actuarial" => array ("method" => "get_entidad_valuacion_actuarial", "object" => "entidad"),
+				//Regresa la valuacion actuarial de n municipios
+				"get_n_entidades_valuacion_actuarial" => array ("method" => "get_n_entidades_valuacion_actuarial", "object" => "entidad"),
+				
 				//Regresa todos los datos asociados a una entidad
 				"get_entidad_todos_datos" => array ("method" => "get_entidad_todos_datos", "object" => "entidad"),
 				//Regresa todos los datos asociados a n entidades
@@ -50,6 +64,14 @@ class handler_action{
 				"get_catalogo_criterios_evaluacion" => array ("method" => "get_catalogo_criterios_evaluacion", "object" => "entidad"),
 				//Obtiene el catalogo de las vriables requeridas en el reporte del IMCO
 				"get_catalogo_reporte_imco" => array ("method" => "get_catalogo_reporte_imco", "object" => "entidad"),
+				//Obtiene el catalogo de los conceptos de las cuentas publicas de un municipio
+				"get_catalogo_cuentas_publicas" => array ("method" => "get_catalogo_cuentas_publicas", "object" => "entidad"),
+				//Obtiene el catalogo de los tipos de documentos no relacionados directamente con el indice del IMCO
+				"get_catalogo_documentos_generales" => array ("method" => "get_catalogo_documentos_generales", "object" => "entidad"),
+				//Obtiene el catalogo de los conceptos de la información presupuestal de un municipio
+				"get_catalogo_informacion_presupuestal" => array ("method" => "get_catalogo_informacion_presupuestal", "object" => "entidad"),
+				//Obtiene el catalogo de los conceptos de la valuacion actuarial de un municipio
+				"get_catalogo_valuacion_actuarial" => array ("method" => "get_catalogo_valuacion_actuarial", "object" => "entidad"),
 				//Busqueda de documentos por palabras clave 
 				"get_documentos_x_palabras_clave" => array ("method" => "get_documentos_x_palabras_clave", "object" => "entidad"),
 				//Obtencion de relacion de documentos por tema 
@@ -276,6 +298,108 @@ class handler_action{
 			return "Error - Validacion de parametros incorrecta";
 	}
 	
+	private function get_entidad_cuentas_publicas($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			if ( ctype_digit( $datos["id_entidad"] ) ){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_entidad_cuentas_publicas($datos["id_entidad"], $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
+	private function get_n_entidades_cuentas_publicas($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			$ids = explode(",", $datos["id_entidad"]);
+			$res = true;
+			foreach ($ids as $id){
+				if ( ! ( ctype_digit($id) ) )
+					$res = False;
+			}
+			if( $res == True){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_n_entidades_cuentas_publicas($ids, $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
+	private function get_entidad_informacion_presupuestal($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			if ( ctype_digit( $datos["id_entidad"] ) ){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_entidad_informacion_presupuestal($datos["id_entidad"], $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
+	private function get_n_entidades_informacion_presupuestal($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			$ids = explode(",", $datos["id_entidad"]);
+			$res = true;
+			foreach ($ids as $id){
+				if ( ! ( ctype_digit($id) ) )
+					$res = False;
+			}
+			if( $res == True){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_n_entidades_informacion_presupuestal($ids, $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
+	private function get_entidad_valuacion_actuarial($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			if ( ctype_digit( $datos["id_entidad"] ) ){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_entidad_valuacion_actuarial($datos["id_entidad"], $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
+	private function get_n_entidades_valuacion_actuarial($datos, $object, $bd_obj){
+		if ( isset($datos["id_entidad"]) ){
+			$ids = explode(",", $datos["id_entidad"]);
+			$res = true;
+			foreach ($ids as $id){
+				if ( ! ( ctype_digit($id) ) )
+					$res = False;
+			}
+			if( $res == True){
+				include_once ("./objects/" . $object . ".php");
+				$obj = new entidad();
+				return $obj->get_n_entidades_valuacion_actuarial($ids, $bd_obj);
+			}
+			else
+				return "Error - Validacion de parametros incorrecta";
+		}
+		else
+			return "Error - Validacion de parametros incorrecta";
+	}
+	
 	private function get_entidad_todos_datos($datos, $object, $bd_obj){
 		if ( isset($datos["id_entidad"]) ){
 			if ( ctype_digit( $datos["id_entidad"] ) ){
@@ -370,6 +494,30 @@ class handler_action{
 		include_once ("./objects/" . $object . ".php");
 		$obj = new entidad();
 		return $obj->get_catalogo_reporte_imco($bd_obj);
+	}
+	
+	private function get_catalogo_cuentas_publicas($datos, $object, $bd_obj){
+		include_once ("./objects/" . $object . ".php");
+		$obj = new entidad();
+		return $obj->get_catalogo_cuentas_publicas($bd_obj);
+	}
+	
+	private function get_catalogo_documentos_generales($datos, $object, $bd_obj){
+		include_once ("./objects/" . $object . ".php");
+		$obj = new entidad();
+		return $obj->get_catalogo_documentos_generales($bd_obj);
+	}
+	
+	private function get_catalogo_informacion_presupuestal($datos, $object, $bd_obj){
+		include_once ("./objects/" . $object . ".php");
+		$obj = new entidad();
+		return $obj->get_catalogo_informacion_presupuestal($bd_obj);
+	}
+	
+	private function get_catalogo_valuacion_actuarial($datos, $object, $bd_obj){
+		include_once ("./objects/" . $object . ".php");
+		$obj = new entidad();
+		return $obj->get_catalogo_valuacion_actuarial($bd_obj);
 	}
 	
 }

@@ -10,7 +10,7 @@ class gestorBD{
 	function __construct(){
 		$this->usuario = "auditoria_coahuila";
 		$this->contrasena = "auditoria_coahuila_temporal";
-		$this->servidor = "localhost";
+		$this->servidor = "166.78.155.100";
 		$this->puerto = "5432";
 		$this->bd = "auditoria_coahuila_transparencia";	
 	}
